@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title th:text="${editing} ? #{dish.edit} : #{dish.create}"></title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body><main class="container narrow">
+<header class="page-header"><div><h1 th:text="${editing} ? #{dish.edit} : #{dish.create}"></h1><p th:text="#{form.requiredHint}"></p></div><a class="button secondary" th:href="@{/dishes}" th:text="#{nav.backDishes}"></a></header>
+<nav class="language"><a th:href="${englishUrl}">English</a> · <a th:href="${vietnameseUrl}">Tiếng Việt</a></nav>
+<form class="card form" method="post" th:action="${formAction}" th:object="${dishForm}">
+<div class="alert error" th:if="${#fields.hasGlobalErrors()}"><p th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p></div>
+<label for="name" th:text="#{field.name} + ' *'"></label><input id="name" type="text" th:field="*{name}" maxlength="255" required><p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+<label for="price" th:text="#{field.price} + ' *'"></label><input id="price" type="number" min="0.01" step="0.01" th:field="*{price}" required><p class="field-error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+<label for="preparationTime" th:text="#{field.preparationTime} + ' *'"></label><input id="preparationTime" type="number" min="1" step="1" th:field="*{preparationTime}" required><p class="field-error" th:if="${#fields.hasErrors('preparationTime')}" th:errors="*{preparationTime}"></p>
+<label for="dishCategoryId" th:text="#{field.category} + ' *'"></label><select id="dishCategoryId" th:field="*{dishCategoryId}" required><option value="" th:text="#{form.selectCategory}"></option><option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option></select><p class="field-error" th:if="${#fields.hasErrors('dishCategoryId')}" th:errors="*{dishCategoryId}"></p><p class="notice" th:if="${#lists.isEmpty(categories)}" th:text="#{form.noCategories}"></p>
+<label for="description" th:text="#{field.description}"></label><textarea id="description" rows="4" th:field="*{description}"></textarea>
+<label class="checkbox" for="isAvailable"><input id="isAvailable" type="checkbox" th:field="*{isAvailable}"> <span th:text="#{status.available}"></span></label>
+<div class="actions"><button class="button" type="submit" th:text="#{action.save}"></button><a class="button secondary" th:href="@{/dishes}" th:text="#{action.cancel}"></a></div>
+</form></main></body></html>

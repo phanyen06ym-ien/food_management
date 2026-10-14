@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title th:text="#{category.title}"></title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body><main class="container"><header class="page-header"><div><h1 th:text="#{category.title}"></h1><p th:text="#{category.intro}"></p></div><a class="button secondary" th:href="@{/dishes}" th:text="#{nav.backDishes}"></a></header>
+<nav class="language"><a th:href="${englishUrl}">English</a> · <a th:href="${vietnameseUrl}">Tiếng Việt</a></nav>
+<p class="alert success" th:if="${success}" th:text="#{${success}}"></p><p class="alert error" th:if="${error}" th:text="#{${error}}"></p>
+<div class="table-wrap" th:if="${!#lists.isEmpty(categories)}"><table><thead><tr><th th:text="#{field.id}"></th><th th:text="#{field.name}"></th><th th:text="#{field.description}"></th><th th:text="#{field.actions}"></th></tr></thead><tbody><tr th:each="c : ${categories}"><td th:text="${c.id}"></td><td th:text="${c.name}"></td><td th:text="${c.description}"></td><td><form method="post" th:action="@{/categories/{id}/delete(id=${c.id})}"><button class="button danger" type="submit" th:text="#{action.delete}"></button></form></td></tr></tbody></table></div>
+<p class="notice" th:if="${#lists.isEmpty(categories)}" th:text="#{category.none}"></p></main></body></html>

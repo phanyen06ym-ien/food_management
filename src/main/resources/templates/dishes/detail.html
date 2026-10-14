@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title th:text="#{dish.detail}"></title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body><main class="container narrow">
+<header class="page-header"><div><h1 th:text="${dish.name}"></h1><p th:text="#{dish.detail}"></p></div><a class="button secondary" th:href="@{/dishes}" th:text="#{nav.backDishes}"></a></header>
+<nav class="language"><a th:href="${englishUrl}">English</a> · <a th:href="${vietnameseUrl}">Tiếng Việt</a></nav>
+<section class="card"><dl class="details">
+<dt th:text="#{field.category}"></dt><dd th:text="${dish.dishCategory.name}"></dd><dt th:text="#{field.price}"></dt><dd th:text="${dish.price}"></dd>
+<dt th:text="#{field.preparationTime}"></dt><dd th:text="${dish.preparationTime}"></dd>
+<dt th:text="#{field.classification}"></dt><dd><span th:if="${dish.quickPreparation}" th:text="#{classification.quick}"></span><span th:unless="${dish.quickPreparation}" th:text="#{classification.regular}"></span></dd>
+<dt th:text="#{field.status}"></dt><dd><span class="status available" th:if="${dish.isAvailable == true}" th:text="#{status.available}"></span><span class="status unavailable" th:unless="${dish.isAvailable == true}" th:text="#{status.unavailable}"></span></dd>
+<dt th:text="#{field.description}"></dt><dd><span th:if="${#strings.isEmpty(dish.description)}" th:text="#{dish.noDescription}"></span><span th:unless="${#strings.isEmpty(dish.description)}" th:text="${dish.description}"></span></dd>
+</dl></section>
+<section class="card"><h2 th:text="#{image.title}"></h2><p th:if="${#lists.isEmpty(images)}" th:text="#{image.none}"></p>
+<ul class="image-list" th:unless="${#lists.isEmpty(images)}"><li th:each="image : ${images}"><img th:src="${image.imageUrl}" th:alt="#{image.alt}"><a th:href="${image.imageUrl}" th:text="${image.imageUrl}" target="_blank" rel="noopener noreferrer"></a><strong th:if="${image.isThumbnail == true}" th:text="#{image.thumbnail}"></strong><form th:unless="${image.isThumbnail == true}" method="post" th:action="@{/dishes/{dishId}/images/{imageId}/thumbnail(dishId=${dish.id},imageId=${image.id})}"><button class="button secondary" type="submit" th:text="#{image.setThumbnail}"></button></form></li></ul>
+<form method="post" th:action="@{/dishes/{id}/images(id=${dish.id})}" th:object="${imageForm}"><label for="imageUrl" th:text="#{image.url}"></label><input id="imageUrl" type="text" th:field="*{imageUrl}" required><p class="field-error" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></p><button class="button" type="submit" th:text="#{image.add}"></button></form>
+</section><p><a class="button" th:href="@{/dishes/{id}/edit(id=${dish.id})}" th:text="#{dish.edit}"></a></p>
+</main></body></html>
